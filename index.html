@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>K5</title>
+
+    <link rel="stylesheet" href="/styles/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="/styles/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+    <div ng-controller="mainController" ng-cloak>
+        <md-content class="md-padding" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+            <md-tabs md-selected="selectedIndex" md-dynamic-height="true">
+                <md-tab>
+                    <md-tab-label>All sounds</md-tab-label>
+                    <md-tab-body>
+                        <br />
+                        <form layout="row" layout-align="start start" ng-submit="search()" novalidate>
+                            <md-input-container>
+                                <label>Start typing to filter</label>
+                                <input ng-model="filter" autofocus>
+                            </md-input-container>
+                            <!--md-button type="submit" class="md-primary md-raised">Search</md-button-->
+                        </form>
+                        <table class="table table-hover borderless">
+                            <thead>
+                                <tr>
+                                    <!--th>#</th-->
+                                    <th>Name</th>
+                                    <th>Sound</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody ng-model="sounds">
+                                <tr ng-repeat="s in sounds">
+                                    <!--td>{{s.id}}</td-->
+                                    <td>{{s.name}}</td>
+                                    <td>{{s.sound}}</td>
+                                    <td ng-click=playSound(s.id)>Play</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </md-tab-body>
+                </md-tab>
+                <md-tab>
+                    <md-tab-label>Add new</md-tab-label>
+                    <md-tab-body>
+                        <form layout="column" layout-align="start start" ng-submit="addNewSound()" novalidate>
+                            <md-input-container>
+                                <label>Name</label>
+                                <input ng-model="name" autofocus>
+                            </md-input-container>
+                            <input ng-model="file" type="file" />
+                            <br />
+                            <md-button type="submit" class="md-primary md-raised">Add new</md-button>
+                        </form>
+                    </md-tab-body>
+                </md-tab>
+            </md-tabs>
+        </md-content>
+    </div>
+    <script src="/scripts/jquery/dist/jquery.js"></script>
+    <script src="/scripts/angular/angular.js"></script>
+    <script src="/scripts/angular-aria/angular-aria.js"></script>
+    <script src="/scripts/angular-animate/angular-animate.js"></script>
+    <script src="/scripts/angular-material/angular-material.js"></script>
+    <script src="/app.js"></script>
+</body>
+
+</html>
