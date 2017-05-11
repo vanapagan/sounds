@@ -49,12 +49,12 @@
                 <md-tab>
                     <md-tab-label>Add new</md-tab-label>
                     <md-tab-body>
-                        <form layout="column" layout-align="start start" ng-submit="addNewSound()" novalidate>
+                        <form layout="column" layout-align="start start" ng-submit="uploadFile()" novalidate>
                             <md-input-container>
                                 <label>Name</label>
                                 <input ng-model="name" autofocus>
                             </md-input-container>
-                            <input ng-model="file" type="file" />
+                            <input type="file" file-model="myFile" />
                             <br />
                             <md-button type="submit" class="md-primary md-raised">Add new</md-button>
                         </form>
