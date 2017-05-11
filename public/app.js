@@ -19,7 +19,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
 app.service('fileUpload', ['$http', function ($http) {
     this.uploadFileToUrl = function (name, file, uploadUrl) {
         var fd = new FormData();
-        fd.append('name', name); 
+        fd.append('name', name);
         fd.append('sound', 'name' + '.wav');
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
@@ -27,8 +27,10 @@ app.service('fileUpload', ['$http', function ($http) {
             headers: { 'Content-Type': undefined }
         }).then(function successCallback(response) {
             console.log(response);
+            return response;
         }, function errorCallback(response) {
             console.log('ERROR');
+            return response;
         });
     }
 }]);
@@ -42,20 +44,8 @@ app.controller('mainController', function ($scope, $http, fileUpload) {
         console.dir(file);
         var uploadUrl = "/sounds";
         fileUpload.uploadFileToUrl(name, file, uploadUrl);
+        $scope.$apply();
     };
-
-    $scope.addFile = function () {
-        uploadFile($scope.files,
-            function (msg) // success
-            {
-                console.log(msg);
-                $scope.$apply();
-            },
-            function (msg) // error
-            {
-                console.log('error');
-            });
-    }
 
     $scope.sounds = [];
 
@@ -83,21 +73,12 @@ app.controller('mainController', function ($scope, $http, fileUpload) {
         $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
     };
 
-    $scope.addNewSound = function () {
-        $http({
-            method: 'POST',
-            url: '/sounds',
-            form: {
-                name: $scope.name,
-                file: $scope.file
-            }
-        }).then(function successCallback(response) {
-            $scope.sounds = response.data;
-        }, function errorCallback(response) {
-            console.log(response);
-            console.log('error');
-        });
+    $scope.playSound = function (name) {
+        playSound(new Audio('http://localhost:3000/sounds/' + name));
     };
 
 });
 
+function playSound(sound) {
+    sound.play();
+};

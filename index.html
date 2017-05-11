@@ -31,7 +31,7 @@
                                 <tr>
                                     <!--th>#</th-->
                                     <th>Name</th>
-                                    <th>Sound</th>
+                                    <th>Date added</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -39,8 +39,8 @@
                                 <tr ng-repeat="s in sounds">
                                     <!--td>{{s.id}}</td-->
                                     <td>{{s.name}}</td>
-                                    <td>{{s.sound}}</td>
-                                    <td ng-click=playSound(s.id)>Play</td>
+                                    <td>{{s.date_created}}</td>
+                                    <td ng-click=playSound(s.name)>Play</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -24,12 +24,13 @@ exports.add_new_sound = function (req, res) {
       res.send(err);
     }
 
-    console.log(req.files);
+    console.log(req.body.name);
+    console.log(req.files.file);
 
     var part = req.files.file;
 
     var writeStream = gfs.createWriteStream({
-      filename: part.name,
+      filename: req.body.name,
       mode: 'w',
       content_type: part.mimetype
     });
@@ -43,7 +44,6 @@ exports.add_new_sound = function (req, res) {
     });
 
     writeStream.write(part.data);
-
     writeStream.end();
 
     res.json(sound);
@@ -53,39 +53,37 @@ exports.add_new_sound = function (req, res) {
 
 exports.read_a_sound = function (req, res) {
 
-    console.log(req.params);
-    gfs.files.find({ filename: req.params.soundId }).toArray(function (err, files) {
+  console.log(req.params);
+  gfs.files.find({ filename: req.params.soundId }).toArray(function (err, files) {
 
-      if (files.length === 0) {
-        return res.status(400).send({
-          message: 'File not found'
-        });
-      }
-
-      res.writeHead(200, { 'Content-Type': files[0].contentType });
-
-      var readstream = gfs.createReadStream({
-        filename: files[0].filename
+    if (files.length === 0) {
+      return res.status(400).send({
+        message: 'File not found'
       });
+    }
 
-      readstream.on('data', function (data) {
-        console.log(data);
-        res.write(data);
-      });
+    res.writeHead(200, { 'Content-Type': files[0].contentType });
 
-      readstream.on('end', function () {
-        console.log('end');
-        res.end();
-      });
-
-      readstream.on('error', function (err) {
-        console.log('An error occurred!', err);
-        throw err;
-      });
-
+    var readstream = gfs.createReadStream({
+      filename: files[0].filename
     });
 
-    // res.json('succeeeded?');
+    readstream.on('data', function (data) {
+      console.log(data);
+      res.write(data);
+    });
+
+    readstream.on('end', function () {
+      console.log('end');
+      res.end();
+    });
+
+    readstream.on('error', function (err) {
+      console.log('An error occurred!', err);
+      throw err;
+    });
+
+  });
 
 };
 

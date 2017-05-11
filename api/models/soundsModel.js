@@ -8,11 +8,7 @@ var SoundSchema = new Schema({
     type: String,
     Required: 'Please enter the name of the sound'
   },
-  sound: {
-    type: String,
-    Required: 'Please upload the sound file'
-  },
-  cate_created: {
+  date_created: {
     type: Date,
     default: Date.now
   }
