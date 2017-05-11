@@ -19,14 +19,14 @@ app.directive('fileModel', ['$parse', function ($parse) {
 app.service('fileUpload', ['$http', function ($http) {
     this.uploadFileToUrl = function (name, file, uploadUrl) {
         var fd = new FormData();
-        fd.append('name', file);
+        fd.append('name', name); 
         fd.append('sound', 'name' + '.wav');
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         }).then(function successCallback(response) {
-            console.log('SUCCESS');
+            console.log(response);
         }, function errorCallback(response) {
             console.log('ERROR');
         });
@@ -48,7 +48,8 @@ app.controller('mainController', function ($scope, $http, fileUpload) {
         uploadFile($scope.files,
             function (msg) // success
             {
-                console.log('uploaded');
+                console.log(msg);
+                $scope.$apply();
             },
             function (msg) // error
             {
