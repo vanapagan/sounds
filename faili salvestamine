@@ -1,0 +1,9 @@
+Sound instace
+	_id
+	name
+	date_created
+	file_id
+	
+kui sellise nimega fail juba eksisteerib, siis:
+												kustuta see
+												lisa uus sama nimega

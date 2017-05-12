@@ -20,7 +20,6 @@ app.service('fileUpload', ['$http', function ($http) {
     this.uploadFileToUrl = function (name, file, uploadUrl) {
         var fd = new FormData();
         fd.append('name', name);
-        fd.append('sound', 'name' + '.wav');
         fd.append('file', file);
         $http.post(uploadUrl, fd, {
             transformRequest: angular.identity,
@@ -38,7 +37,8 @@ app.service('deleteService', ['$http', function ($http) {
         var fd = new FormData();
         fd.append('id', id);
         fd.append('name', name);
-        $http.delete(uploadUrl + "/" + id, fd, {
+        console.log(uploadUrl + "/" + id + "/" + name);
+        $http.delete(uploadUrl + "/" + id + "/" + name, fd, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         }).then(function successCallback(response) {

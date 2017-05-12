@@ -18,35 +18,77 @@ exports.list_all_sounds = function (req, res) {
 
 
 exports.add_new_sound = function (req, res) {
-  var new_sound = new Sound(req.body);
-  new_sound.save(function (err, sound) {
-    if (err) {
-      res.send(err);
+
+  var already_exists = true;
+
+  var part = req.files.file;
+  var name = req.body.name;
+
+  gfs.exist({
+    filename: name
+  }, function (err, found) {
+    if (err) return handleError(err);
+    if (found) {
+      console.log('File named ' + name + ' already exists. Overwriting it.');
+      gfs.remove({
+        filename: 'a'
+      }, function (err) {
+        if (err) return handleError(err);
+        console.log('Successfully deleted the old file');
+        var writeStream = gfs.createWriteStream({
+          filename: name,
+          mode: 'w',
+          content_type: part.mimetype
+        });
+
+        console.log('Saving file');
+        writeStream.on('close', function (file) {
+          console.log('File ' + file.filename + ' saved successfully');
+        });
+
+        writeStream.write(part.data);
+        writeStream.end();
+
+        if (!already_exists) {
+          var new_sound = new Sound(req.body);
+          new_sound.save(function (err, sound) {
+            if (err) {
+              res.send(err);
+            }
+            res.json(sound);
+          });
+        }
+      });
+    } else {
+      already_exists = false;
+      console.log('File named ' + name + ' does not exist. Creating it now.');
+      var writeStream = gfs.createWriteStream({
+        filename: name,
+        mode: 'w',
+        content_type: part.mimetype
+      });
+
+      console.log('Saving file');
+      writeStream.on('close', function (file) {
+        console.log('File ' + file.filename + ' saved successfully');
+      });
+
+      writeStream.write(part.data);
+      writeStream.end();
+
+
+      if (!already_exists) {
+        var new_sound = new Sound(req.body);
+        new_sound.save(function (err, sound) {
+          if (err) {
+            res.send(err);
+          }
+          res.json(sound);
+        });
+      }
     }
 
-    console.log(req.body.name);
-    console.log(req.files.file);
 
-    var part = req.files.file;
-
-    var writeStream = gfs.createWriteStream({
-      filename: req.body.name,
-      mode: 'w',
-      content_type: part.mimetype
-    });
-
-    console.log('saving');
-    writeStream.on('close', function () {
-      console.log('file saved successfully');
-      // return res.status(200).send({
-      //  message: 'Success'
-      //});
-    });
-
-    writeStream.write(part.data);
-    writeStream.end();
-
-    res.json(sound);
   });
 };
 
@@ -69,7 +111,6 @@ exports.read_a_sound = function (req, res) {
     });
 
     readstream.on('data', function (data) {
-      console.log(data);
       res.write(data);
     });
 
@@ -98,14 +139,49 @@ exports.update_a_sound = function (req, res) {
 
 
 exports.delete_a_sound = function (req, res) {
-  console.log(req);
   Sound.remove({
     _id: req.params.soundId
   }, function (err, sound) {
     if (err)
       res.send(err);
 
-    gfs.remove({ name: req.body.name });
+    console.log(req.params.soundId);
+    console.log(req.params.fileId);
+
+    gfs.exist({
+      filename: 'a'
+    }, function (err, found) {
+      if (err) return handleError(err);
+      found ? console.log('File exists') : console.log('File does not exist');
+      gfs.remove({
+        filename: 'a'
+      }, function (err) {
+        if (err) return handleError(err);
+        console.log('success');
+        gfs.exist({
+          filename: 'a'
+        }, function (err, found2) {
+          if (err) return handleError(err);
+          found2 ? console.log('File exists') : console.log('File does not exist');
+        });
+      });
+    });
+    /*
+  gfs.files.find().toArray(function (err, files) {
+ 
+    if (files.length === 0) {
+      console.log('did not found any');
+    } else {
+      console.log('before found: ' + files.length);
+      console.log('file ' + files[0]._id);
+      console.log('filename ' + files[0].filename);
+      gfs.remove({ _id: files[0]._id });
+      gfs.files.find().toArray(function (err, files) {
+        console.log('after found: ' + files.length);
+      });
+    }
+ 
+  });*/
 
     res.json({ message: 'Sound successfully deleted' });
   });
