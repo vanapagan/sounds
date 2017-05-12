@@ -5,3 +5,8 @@ body {
 md-tabs {
     transition: 0s !important;
 }
+
+.icon {
+    width: 1.8em;
+    height: 1.8em;
+}

@@ -30,19 +30,18 @@
                         <table class="table table-hover borderless">
                             <thead>
                                 <tr>
-                                    <!--th>#</th-->
-                                    <th>Name</th>
-                                    <th>Date added</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th class="col-xs-8">Name</th>
+                                    <th class="col-xs-2">Date added</th>
+                                    <th class="col-xs-1"></th>
+                                    <th class="col-xs-1"></th>
                                 </tr>
                             </thead>
                             <tbody ng-model="sounds">
                                 <tr ng-repeat="s in sounds | filter: filter">
                                     <td>{{s.name}}</td>
                                     <td>{{s.date_created}}</td>
-                                    <td ng-click=playSound(s.name)>Play</td>
-                                    <td ng-click=deleteSound(s.name)>Delete</td>
+                                    <td align="center"><img class="icon" src="/icon-play.png" alt="play" ng-click=playSound(s.name)></td>
+                                    <td align="center"><img class="icon" src="/icon-delete.png" alt="delete"  ng-click="deleteSound(s.name)"></td>
                                 </tr>
                             </tbody>
                         </table>
