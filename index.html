@@ -14,7 +14,7 @@
 
 <body>
     <div ng-controller="mainController" ng-cloak>
-        <md-content class="md-padding" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+        <md-content class="md-padding" md-selected="data.selectedIndex">
             <md-tabs md-selected="selectedIndex" md-dynamic-height="true">
                 <md-tab>
                     <md-tab-label>All sounds</md-tab-label>
@@ -42,7 +42,7 @@
                                     <td>{{s.name}}</td>
                                     <td>{{s.date_created}}</td>
                                     <td ng-click=playSound(s.name)>Play</td>
-                                    <td ng-click=deleteSound(s._id,s.file_id)>Delete</td>
+                                    <td ng-click=deleteSound(s.name)>Delete</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -60,6 +60,7 @@
                             <br />
                             <md-button type="submit" class="md-primary md-raised">Add new</md-button>
                         </form>
+                        <p><small>{{msg}}</small></p>
                     </md-tab-body>
                 </md-tab>
             </md-tabs>

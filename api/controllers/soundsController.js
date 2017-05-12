@@ -22,6 +22,8 @@ exports.add_new_sound = function (req, res) {
   var already_exists = true;
 
   var part = req.files.file;
+  console.log('file content:');
+  console.log(req.files.file);
   var name = req.body.name;
 
   gfs.exist({
@@ -31,7 +33,7 @@ exports.add_new_sound = function (req, res) {
     if (found) {
       console.log('File named ' + name + ' already exists. Overwriting it.');
       gfs.remove({
-        filename: 'a'
+        filename: name
       }, function (err) {
         if (err) return handleError(err);
         console.log('Successfully deleted the old file');
@@ -49,19 +51,12 @@ exports.add_new_sound = function (req, res) {
         writeStream.write(part.data);
         writeStream.end();
 
-        if (!already_exists) {
-          var new_sound = new Sound(req.body);
-          new_sound.save(function (err, sound) {
-            if (err) {
-              res.send(err);
-            }
-            res.json(sound);
-          });
-        }
+        res.json({'msg': 'Sound named ' + name + ' already exists. Overwriting it.'});
       });
     } else {
       already_exists = false;
       console.log('File named ' + name + ' does not exist. Creating it now.');
+
       var writeStream = gfs.createWriteStream({
         filename: name,
         mode: 'w',
@@ -83,7 +78,8 @@ exports.add_new_sound = function (req, res) {
           if (err) {
             res.send(err);
           }
-          res.json(sound);
+
+          res.json({'sound': sound, 'msg': 'Sound named ' + name + ' saved successfully'});
         });
       }
     }
@@ -115,7 +111,6 @@ exports.read_a_sound = function (req, res) {
     });
 
     readstream.on('end', function () {
-      console.log('end');
       res.end();
     });
 
@@ -139,27 +134,26 @@ exports.update_a_sound = function (req, res) {
 
 
 exports.delete_a_sound = function (req, res) {
+  console.log(req.params.soundId);
   Sound.remove({
-    _id: req.params.soundId
+    name: req.params.soundId
   }, function (err, sound) {
     if (err)
       res.send(err);
 
-    console.log(req.params.soundId);
-    console.log(req.params.fileId);
 
     gfs.exist({
-      filename: 'a'
+      filename: req.params.soundId
     }, function (err, found) {
       if (err) return handleError(err);
       found ? console.log('File exists') : console.log('File does not exist');
       gfs.remove({
-        filename: 'a'
+        filename: req.params.soundId
       }, function (err) {
         if (err) return handleError(err);
         console.log('success');
         gfs.exist({
-          filename: 'a'
+          filename: req.params.soundId
         }, function (err, found2) {
           if (err) return handleError(err);
           found2 ? console.log('File exists') : console.log('File does not exist');
