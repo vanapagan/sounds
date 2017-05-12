@@ -1,0 +1,11 @@
+1st cmd
+C:\Program Files\MongoDB\Server\3.4\bin>mongod --dbpath C:\Users\Kristo\sounds\data\
+
+2nd cmd
+C:\Program Files\MongoDB\Server\3.4\bin>mongo
+use soundsdb
+db.dropDatabase();
+db.usercollection.find().pretty()
+
+3rd cmd
+npm start

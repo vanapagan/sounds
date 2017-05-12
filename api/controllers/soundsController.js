@@ -98,11 +98,15 @@ exports.update_a_sound = function (req, res) {
 
 
 exports.delete_a_sound = function (req, res) {
+  console.log(req);
   Sound.remove({
     _id: req.params.soundId
   }, function (err, sound) {
     if (err)
       res.send(err);
+
+    gfs.remove({ name: req.body.name });
+
     res.json({ message: 'Sound successfully deleted' });
   });
 };

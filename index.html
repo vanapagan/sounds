@@ -22,7 +22,7 @@
                         <form layout="row" layout-align="start start" ng-submit="search()" novalidate>
                             <md-input-container>
                                 <label>Start typing to filter</label>
-                                <input ng-model="filter" autofocus>
+                                <input ng-model="filter" autofocus ng-change="changeFilter()">
                             </md-input-container>
                             <!--md-button type="submit" class="md-primary md-raised">Search</md-button-->
                         </form>
@@ -33,14 +33,15 @@
                                     <th>Name</th>
                                     <th>Date added</th>
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody ng-model="sounds">
-                                <tr ng-repeat="s in sounds">
-                                    <!--td>{{s.id}}</td-->
+                                <tr ng-repeat="s in sounds | filter: filter">
                                     <td>{{s.name}}</td>
                                     <td>{{s.date_created}}</td>
                                     <td ng-click=playSound(s.name)>Play</td>
+                                    <td ng-click=deleteSound(s._id,s.name)>Delete</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -35,7 +35,27 @@ app.service('fileUpload', ['$http', function ($http) {
     }
 }]);
 
-app.controller('mainController', function ($scope, $http, fileUpload) {
+app.service('deleteService', ['$http', function ($http) {
+    this.deleteSound = function (id, name, uploadUrl) {
+        var fd = new FormData();
+        fd.append('id', id);
+        fd.append('name', name);
+        $http.delete(uploadUrl +  "/" + id, fd, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }).then(function successCallback(response) {
+            console.log(response);
+            return response;
+        }, function errorCallback(response) {
+            console.log('ERROR');
+            return response;
+        });
+    }
+}]);
+
+app.controller('mainController', function ($scope, $http, fileUpload, deleteService) {
+
+    $scope.filter = "";
 
     $scope.uploadFile = function () {
         var name = $scope.name;
@@ -44,7 +64,6 @@ app.controller('mainController', function ($scope, $http, fileUpload) {
         console.dir(file);
         var uploadUrl = "/sounds";
         fileUpload.uploadFileToUrl(name, file, uploadUrl);
-        $scope.$apply();
     };
 
     $scope.sounds = [];
@@ -75,6 +94,13 @@ app.controller('mainController', function ($scope, $http, fileUpload) {
 
     $scope.playSound = function (name) {
         playSound(new Audio('http://localhost:3000/sounds/' + name));
+    };
+
+    $scope.deleteSound = function (id, name) {
+        console.log(id);
+        console.log(name);
+        var uploadUrl = "/sounds";
+        deleteService.deleteSound(id, name, uploadUrl);
     };
 
 });
