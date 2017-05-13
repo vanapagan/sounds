@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngMaterial']);
+var app = angular.module('app', ['ngMaterial', 'angularMoment']);
 
 app.directive('fileModel', ['$parse', function ($parse) {
     return {
@@ -46,7 +46,7 @@ app.service('deleteService', ['$http', function ($http) {
     }
 }]);
 
-app.controller('mainController', function ($scope, $http, fileUpload, deleteService) {
+app.controller('mainController', function ($scope, $http, fileUpload, deleteService, moment) {
 
     var allSounds = function () {
         return $http({
@@ -104,7 +104,6 @@ app.controller('mainController', function ($scope, $http, fileUpload, deleteServ
                 updateSoundList();
                 $scope.name = '';
                 $scope.myFile = null;
-                console.log(response.data);
                 $scope.msg = response.data.msg;
             }, function errorCallback(response) {
                 return response;
@@ -115,10 +114,13 @@ app.controller('mainController', function ($scope, $http, fileUpload, deleteServ
     };
 
     $scope.deleteSound = function (name) {
-        console.log(name);
         var uploadUrl = "/sounds";
         deleteService.deleteSound(name, uploadUrl);
         updateSoundList();
+    };
+
+    $scope.formatDate = function (date) {
+        return moment().hour(8).minute(0).second(0).toDate();
     };
 
 });

@@ -30,8 +30,8 @@
                         <table class="table table-hover borderless">
                             <thead>
                                 <tr>
-                                    <th class="col-xs-8">Name</th>
-                                    <th class="col-xs-2">Date added</th>
+                                    <th class="col-xs-7">Name</th>
+                                    <th class="col-xs-3">Date added</th>
                                     <th class="col-xs-1"></th>
                                     <th class="col-xs-1"></th>
                                 </tr>
@@ -39,9 +39,10 @@
                             <tbody ng-model="sounds">
                                 <tr ng-repeat="s in sounds | filter: filter">
                                     <td>{{s.name}}</td>
-                                    <td>{{s.date_created}}</td>
-                                    <td align="center"><img class="icon" src="/icon-play.png" alt="play" ng-click=playSound(s.name)></td>
-                                    <td align="center"><img class="icon" src="/icon-delete.png" alt="delete"  ng-click="deleteSound(s.name)"></td>
+                                    <!--td>{{formatDate(s.date_created)}}</td-->
+                                    <td>{{s.date_created | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}</td>
+                                    <td align="center"><img class="icon" src="/images/icon-play.png" alt="play" ng-click=playSound(s.name)></td>
+                                    <td align="center"><img class="icon" src="/images/icon-delete.png" alt="delete" ng-click="deleteSound(s.name)"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -70,6 +71,8 @@
     <script src="/scripts/angular-aria/angular-aria.js"></script>
     <script src="/scripts/angular-animate/angular-animate.js"></script>
     <script src="/scripts/angular-material/angular-material.js"></script>
+    <script src="/scripts/moment/moment.js"></script>
+    <script src="/scripts/angular-moment/angular-moment.js"></script>
     <script src="/app.js"></script>
 </body>
 
