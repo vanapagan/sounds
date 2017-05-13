@@ -16,37 +16,7 @@ app.directive('fileModel', ['$parse', function ($parse) {
     };
 }]);
 
-app.service('fileUpload', ['$http', function ($http) {
-    this.uploadFileToUrl = function (name, file, uploadUrl) {
-        var fd = new FormData();
-        fd.append('name', name);
-        fd.append('file', file);
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
-        }).then(function successCallback(response) {
-            return response;
-        }, function errorCallback(response) {
-            return response;
-        });
-    }
-}]);
-
-app.service('deleteService', ['$http', function ($http) {
-    this.deleteSound = function (name, uploadUrl) {
-        var fd = new FormData();
-        $http.delete(uploadUrl + "/" + name, fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
-        }).then(function successCallback(response) {
-            return response;
-        }, function errorCallback(response) {
-            return response;
-        });
-    }
-}]);
-
-app.controller('mainController', function ($scope, $http, fileUpload, deleteService, moment) {
+app.controller('mainController', function ($scope, $http, moment) {
 
     var allSounds = function () {
         return $http({
@@ -59,14 +29,6 @@ app.controller('mainController', function ($scope, $http, fileUpload, deleteServ
         allSounds().then(function successCallback(response) {
             $scope.sounds = response.data;
         }, function errorCallback(response) {
-        });
-    }
-
-    var uploadSound = function (fd) {
-        console.log(fd);
-        return $http.post("/sounds", fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
         });
     }
 
@@ -98,6 +60,20 @@ app.controller('mainController', function ($scope, $http, fileUpload, deleteServ
         return fd;
     };
 
+    var uploadSound = function (fd) {
+        return $http.post("/sounds", fd, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        });
+    };
+
+    var deleteSound = function (name) {
+        return $http.delete("/sounds" + "/" + name, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        });
+    }
+
     $scope.uploadFile = function () {
         if ($scope.name != null && $scope.myFile != null && $scope.name != "") {
             uploadSound(setFields($scope.name, $scope.myFile)).then(function successCallback(response) {
@@ -114,9 +90,11 @@ app.controller('mainController', function ($scope, $http, fileUpload, deleteServ
     };
 
     $scope.deleteSound = function (name) {
-        var uploadUrl = "/sounds";
-        deleteService.deleteSound(name, uploadUrl);
-        updateSoundList();
+        deleteSound(name).then(function successCallback(response) {
+            updateSoundList();
+        }, function errorCallback(response) {
+            return response;
+        });
     };
 
     $scope.formatDate = function (date) {

@@ -25,9 +25,8 @@
                                 <label>Start typing to filter</label>
                                 <input ng-model="filter" autofocus ng-change="changeFilter()">
                             </md-input-container>
-                            <!--md-button type="submit" class="md-primary md-raised">Search</md-button-->
                         </form>
-                        <table class="table table-hover borderless">
+                        <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th class="col-xs-7">Name</th>
@@ -39,7 +38,8 @@
                                 <tr ng-repeat="s in sounds | filter: filter">
                                     <td>{{s.name}}</td>
                                     <td>{{s.date_created | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}</td>
-                                    <td align="center"><img class="icon" src="/images/icon-play.png" alt="play" ng-click=playSound(s.name)><img class="icon" src="/images/icon-delete.png" alt="delete" ng-click="deleteSound(s.name)"></td>
+                                    <td align="center"><img class="icon" src="/images/icon-play.png" alt="play" ng-click=playSound(s.name)><img
+                                            class="icon" src="/images/icon-delete.png" alt="delete" ng-click="deleteSound(s.name)"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -70,6 +70,8 @@
     <script src="/scripts/angular-material/angular-material.js"></script>
     <script src="/scripts/moment/moment.js"></script>
     <script src="/scripts/angular-moment/angular-moment.js"></script>
+    <script src="/scripts/ng-file-upload/dist/ng-file-upload-shim.js"></script>
+    <script src="/scripts/ng-file-upload/dist/ng-file-upload.js"></script>
     <script src="/app.js"></script>
 </body>
 
