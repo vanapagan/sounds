@@ -32,17 +32,14 @@
                                 <tr>
                                     <th class="col-xs-7">Name</th>
                                     <th class="col-xs-3">Date added</th>
-                                    <th class="col-xs-1"></th>
-                                    <th class="col-xs-1"></th>
+                                    <th class="col-xs-2"></th>
                                 </tr>
                             </thead>
                             <tbody ng-model="sounds">
                                 <tr ng-repeat="s in sounds | filter: filter">
                                     <td>{{s.name}}</td>
-                                    <!--td>{{formatDate(s.date_created)}}</td-->
                                     <td>{{s.date_created | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'}}</td>
-                                    <td align="center"><img class="icon" src="/images/icon-play.png" alt="play" ng-click=playSound(s.name)></td>
-                                    <td align="center"><img class="icon" src="/images/icon-delete.png" alt="delete" ng-click="deleteSound(s.name)"></td>
+                                    <td align="center"><img class="icon" src="/images/icon-play.png" alt="play" ng-click=playSound(s.name)><img class="icon" src="/images/icon-delete.png" alt="delete" ng-click="deleteSound(s.name)"></td>
                                 </tr>
                             </tbody>
                         </table>
